@@ -1,11 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Creator | Portfolio</title>
+    <!-- Google Fonts for futuristic look -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Syncopate:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/main.css">
 </head>
 <body>
-    
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Background Canvas -->
+    <canvas id="neural-canvas"></canvas>
+
+    <!-- Main Content Wrapper -->
+    <div class="glass-wrapper">
+        <header>
+            <div class="logo">CYBER<span>.PORT</span></div>
+            <nav>
+                <a href="#about" class="hover-target">About</a>
+                <a href="#works" class="hover-target">Works</a>
+                <a href="#contact" class="hover-target">Contact</a>
+            </nav>
+        </header>
+
+        <section id="hero">
+            <div class="hero-content mix-blend">
+                <h2 class="glitch" data-text="BEYOND REALITY">BEYOND REALITY</h2>
+                <h1>Hi, I'm a <br/><span class="neon-text">Creator</span></h1>
+                <p>Building mind-blowing digital experiences from the ground up.</p>
+                <div class="hero-buttons">
+                    <a href="#works" class="btn primary hover-target">View Work</a>
+                    <a href="#contact" class="btn secondary hover-target">Get in Touch</a>
+                </div>
+            </div>
+            <!-- Orb decorative element inside glass wrapper -->
+            <div class="orb glowing-orb-1"></div>
+        </section>
+
+        <section id="about" class="reveal">
+            <div class="about-grid">
+                <div class="about-text glass-card hover-tilt hover-target">
+                    <h2>The <span class="neon-text">Vision</span></h2>
+                    <p>I blend art and code to craft experiences that defy expectations. Pushing the boundaries of web technologies to deliver something truly unique.</p>
+                    <div class="skills">
+                        <span class="skill-tag">Design</span><span class="skill-tag">Motion</span><span class="skill-tag">Code</span><span class="skill-tag">WebXR</span>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="orb glowing-orb-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="reveal">
+            <h2>Select <span class="neon-text">Works</span></h2>
+            <div class="works-gallery">
+                <!-- 3D Tilt Cards -->
+                <div class="work-card glass-card hover-tilt hover-target">
+                    <div class="card-image bg-1"></div>
+                    <div class="card-info">
+                        <h3>Project Alpha</h3>
+                        <p>Interactive Data Viz</p>
+                    </div>
+                </div>
+                <div class="work-card glass-card hover-tilt hover-target">
+                    <div class="card-image bg-2"></div>
+                    <div class="card-info">
+                        <h3>Neon Genesis</h3>
+                        <p>WebXR Experience</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="reveal glass-card text-center" id="contact">
+            <h2>Ready to <span class="neon-text">Connect?</span></h2>
+            <a href="mailto:hello@example.com" class="btn primary hover-target">Say Hello</a>
+            <p class="copyright">© 2026 CYBER.PORT // Mind-Blowing Designs</p>
+        </footer>
+    </div>
+
+    <script src="script/app.js"></script>
 </body>
 </html>
