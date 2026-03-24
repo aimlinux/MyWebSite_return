@@ -29,7 +29,7 @@ hoverTargets.forEach(target => {
     target.addEventListener('mouseenter', () => {
         cursorOutline.style.width = '60px';
         cursorOutline.style.height = '60px';
-        cursorOutline.style.backgroundColor = 'rgba(0, 255, 255, 0.1)';
+        cursorOutline.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
         cursorDot.style.transform = 'translate(-50%, -50%) scale(0.5)';
     });
     target.addEventListener('mouseleave', () => {
@@ -52,9 +52,10 @@ let lastMouseX = 0;
 let lastMouseY = 0;
 let mouseSpeed = 0;
 
-// Jazz/Neo-soul modern chords
-const chordNames = ['Cmaj9', 'Am11', 'Fmaj7', 'G13', 'E7#9', 'Dm9', 'Bbmaj13', 'Eb9', 'G#m11', 'F#13'];
-const colors = ['#0ff', '#bd00ff', '#ff0055', '#00ffaa'];
+// Acoustic modern chords
+const chordNames = ['Cadd9', 'G6', 'Em7', 'Dadd4', 'A7sus4', 'Fmaj7', 'Bm7(11)', 'Emaj9', 'Am9', 'D13'];
+// Acoustic string colors: Bronze, Phosphor Bronze, Silver, Gold/Brass
+const colors = ['#cd7f32', '#b87333', '#d4af37', '#e6e8fa', '#cca677'];
 
 class GuitarString {
     constructor(y, color) {
@@ -142,15 +143,15 @@ class GuitarString {
             }
         }
         
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = 'rgba(212, 175, 55, 0.4)';
         ctx.strokeStyle = this.color;
         
         let centerVy = 0;
         for (let i = 0; i < this.numPoints; i++) {
             centerVy = Math.max(centerVy, Math.abs(this.points[i].vy));
         }
-        ctx.lineWidth = 1 + Math.min(centerVy * 0.3, 4);
+        ctx.lineWidth = 1.5 + Math.min(centerVy * 0.4, 5);
         
         ctx.stroke();
         ctx.shadowBlur = 0;
@@ -182,7 +183,8 @@ function spawnChord(x, y, color) {
     el.textContent = chordNames[Math.floor(Math.random() * chordNames.length)];
     el.style.left = `${x}px`;
     el.style.top = `${y}px`;
-    el.style.textShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
+    el.style.textShadow = `0 0 15px rgba(212, 175, 55, 0.6), 0 0 30px rgba(205, 127, 50, 0.4)`;
+    el.style.color = color;
     
     chordContainer.appendChild(el);
     setTimeout(() => el.remove(), 1500);

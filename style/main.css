@@ -1,12 +1,12 @@
 :root {
-    --bg: #030305;
-    --text: #f0f0f0;
-    --neon-cyan: #0ff;
-    --neon-purple: #bd00ff;
-    --glass-bg: rgba(20, 20, 25, 0.4);
-    --glass-border: rgba(255, 255, 255, 0.08);
-    --font-head: 'Syncopate', sans-serif;
-    --font-body: 'Space Grotesk', sans-serif;
+    --bg: #120e0b;
+    --text: #fdf5e6;
+    --neon-cyan: #d4af37;
+    --neon-purple: #cd7f32;
+    --glass-bg: rgba(44, 28, 18, 0.4);
+    --glass-border: rgba(212, 175, 55, 0.15);
+    --font-head: 'Playfair Display', serif;
+    --font-body: 'Outfit', sans-serif;
 }
 
 * {
@@ -56,7 +56,7 @@ body {
     width: 100vw;
     height: 100vh;
     z-index: -2;
-    background: radial-gradient(circle at center, #050508 0%, #000000 100%);
+    background: radial-gradient(circle at center, #26160c 0%, #070402 100%);
 }
 
 #chord-container {
@@ -108,9 +108,10 @@ header {
 
 .logo {
     font-family: var(--font-head);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
+    font-style: italic;
 }
 .logo span {
     color: var(--neon-cyan);
@@ -159,48 +160,22 @@ p {
 }
 
 .neon-text {
-    color: transparent;
-    -webkit-text-stroke: 1px var(--neon-cyan);
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    color: var(--neon-cyan);
+    -webkit-text-stroke: 0px;
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    font-style: italic;
 }
 
-/* Glitch effect */
-.glitch {
+/* Acoustic Sub effect */
+.acoustic-sub {
     position: relative;
     font-size: 1.2rem;
     color: var(--neon-purple);
     letter-spacing: 5px;
     margin-bottom: 10px;
-}
-.glitch::before, .glitch::after {
-    content: attr(data-text);
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8;
-}
-.glitch::before {
-    left: 2px;
-    text-shadow: -2px 0 red;
-    clip: rect(24px, 550px, 90px, 0);
-    animation: glitch-anim 3s infinite linear alternate-reverse;
-}
-.glitch::after {
-    left: -2px;
-    text-shadow: -2px 0 blue;
-    clip: rect(85px, 550px, 140px, 0);
-    animation: glitch-anim 2.5s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-anim {
-    0% { clip: rect(10px, 9999px, 44px, 0); }
-    20% { clip: rect(44px, 9999px, 56px, 0); }
-    40% { clip: rect(12px, 9999px, 89px, 0); }
-    60% { clip: rect(78px, 9999px, 12px, 0); }
-    80% { clip: rect(90px, 9999px, 5px, 0); }
-    100% { clip: rect(20px, 9999px, 60px, 0); }
+    text-transform: uppercase;
+    font-family: var(--font-body);
+    font-weight: 300;
 }
 
 /* Sections */
@@ -217,25 +192,25 @@ section {
 .orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(90px);
     z-index: -1;
-    opacity: 0.6;
-    animation: float 10s infinite ease-in-out;
+    opacity: 0.4;
+    animation: float 12s infinite ease-in-out;
 }
 .glowing-orb-1 {
     width: 400px;
     height: 400px;
-    background: var(--neon-purple);
+    background: radial-gradient(circle, var(--neon-cyan), transparent 70%);
     top: 10%;
     right: 5%;
 }
 .glowing-orb-2 {
     width: 300px;
     height: 300px;
-    background: var(--neon-cyan);
+    background: radial-gradient(circle, var(--neon-purple), transparent 70%);
     bottom: 20%;
     left: 0;
-    animation-delay: -5s;
+    animation-delay: -6s;
 }
 
 @keyframes float {
@@ -279,11 +254,11 @@ section {
 .btn.primary {
     background: linear-gradient(45deg, var(--neon-purple), var(--neon-cyan));
     color: #fff;
-    box-shadow: 0 0 20px rgba(189, 0, 255, 0.4);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
 }
 
 .btn.primary:hover {
-    box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
 }
 
 .btn.secondary {
@@ -293,7 +268,7 @@ section {
 }
 
 .btn.secondary:hover {
-    background: rgba(0, 255, 255, 0.1);
+    background: rgba(212, 175, 55, 0.1);
 }
 
 /* About Grid */
@@ -351,8 +326,8 @@ section {
     filter: grayscale(0%) brightness(1);
 }
 
-.bg-1 { background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80'); }
-.bg-2 { background-image: linear-gradient(to top, rgba(0,0,0,0.8), transparent), url('https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?auto=format&fit=crop&q=80'); }
+.bg-1 { background-image: linear-gradient(to top, rgba(18, 14, 11, 0.9), transparent), url('https://images.unsplash.com/photo-1525201170942-eaf0991e2b46?auto=format&fit=crop&q=80&w=800'); }
+.bg-2 { background-image: linear-gradient(to top, rgba(18, 14, 11, 0.9), transparent), url('https://images.unsplash.com/photo-1462965326201-d02e4f455804?auto=format&fit=crop&q=80&w=800'); }
 
 .card-info {
     position: relative;
