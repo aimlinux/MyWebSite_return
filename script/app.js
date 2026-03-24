@@ -40,84 +40,172 @@ hoverTargets.forEach(target => {
     });
 });
 
-// ====== Neural Network Canvas ======
-const canvas = document.getElementById('neural-canvas');
+// ====== Strings Canvas Physics ======
+const canvas = document.getElementById('strings-canvas');
 const ctx = canvas.getContext('2d');
-let particles = [];
+const chordContainer = document.getElementById('chord-container');
+
 let w, h;
+let strings = [];
+const numStrings = 6;
+let lastMouseX = 0;
+let lastMouseY = 0;
+let mouseSpeed = 0;
+
+// Jazz/Neo-soul modern chords
+const chordNames = ['Cmaj9', 'Am11', 'Fmaj7', 'G13', 'E7#9', 'Dm9', 'Bbmaj13', 'Eb9', 'G#m11', 'F#13'];
+const colors = ['#0ff', '#bd00ff', '#ff0055', '#00ffaa'];
+
+class GuitarString {
+    constructor(y, color) {
+        this.baseY = y;
+        this.points = [];
+        this.numPoints = 50;
+        this.color = color;
+        this.plucked = false;
+
+        for (let i = 0; i <= this.numPoints; i++) {
+            this.points.push({ x: 0, y: y, baseY: y, vy: 0 });
+        }
+    }
+
+    resize(width) {
+        for (let i = 0; i <= this.numPoints; i++) {
+            this.points[i].x = (i / this.numPoints) * width;
+        }
+    }
+
+    update() {
+        let isHovered = false;
+        
+        for (let i = 1; i < this.numPoints; i++) {
+            let p = this.points[i];
+            
+            // Interaction with mouse
+            let dx = p.x - mouseX;
+            let dy = p.y - mouseY;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+            
+            // Plucking radius string
+            if (dist < 40 && Math.abs(mouseSpeed) > 1) {
+                p.y += (mouseY - p.y) * 0.6; 
+                isHovered = true;
+                this.plucked = true;
+            } else {
+                // Spring physics
+                let tension = 0.08;
+                let dampening = 0.90;
+                
+                let targetY = p.baseY;
+                // Pull towards neighbors to propagate wave
+                let leftP = this.points[i - 1];
+                let rightP = this.points[i + 1];
+                if (leftP && rightP) {
+                    targetY = (leftP.y + rightP.y + p.baseY * 2) / 4;
+                }
+                
+                p.vy += (targetY - p.y) * tension;
+                p.vy *= dampening;
+                p.y += p.vy;
+            }
+        }
+        
+        if (this.plucked && !isHovered) {
+            let maxVy = 0;
+            let maxP = null;
+            for (let i = 1; i < this.numPoints; i++) {
+                if (Math.abs(this.points[i].vy) > maxVy) {
+                    maxVy = Math.abs(this.points[i].vy);
+                    maxP = this.points[i];
+                }
+            }
+            if (maxVy > 5 && maxP) {
+                spawnChord(maxP.x, maxP.y, this.color);
+            }
+            this.plucked = false;
+        }
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.moveTo(this.points[0].x, this.points[0].y);
+        
+        for (let i = 1; i < this.numPoints; i++) {
+            let p = this.points[i];
+            let nextP = this.points[i+1];
+            if (nextP) {
+                let xc = (p.x + nextP.x) / 2;
+                let yc = (p.y + nextP.y) / 2;
+                ctx.quadraticCurveTo(p.x, p.y, xc, yc);
+            } else {
+                ctx.lineTo(p.x, p.y);
+            }
+        }
+        
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = this.color;
+        ctx.strokeStyle = this.color;
+        
+        let centerVy = 0;
+        for (let i = 0; i < this.numPoints; i++) {
+            centerVy = Math.max(centerVy, Math.abs(this.points[i].vy));
+        }
+        ctx.lineWidth = 1 + Math.min(centerVy * 0.3, 4);
+        
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+    }
+}
 
 function initCanvas() {
     w = canvas.width = window.innerWidth;
     h = canvas.height = window.innerHeight;
-    particles = [];
-    const particleCount = Math.floor((w * h) / 15000);
     
-    for (let i = 0; i < particleCount; i++) {
-        particles.push({
-            x: Math.random() * w,
-            y: Math.random() * h,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            radius: Math.random() * 2 + 0.5
-        });
+    strings = [];
+    let spacing = h / (numStrings + 1);
+    for (let i = 1; i <= numStrings; i++) {
+        let color = colors[i % colors.length];
+        let string = new GuitarString(spacing * i, color);
+        string.resize(w);
+        strings.push(string);
     }
 }
+
 initCanvas();
 window.addEventListener('resize', initCanvas);
 
-function drawNetwork() {
-    ctx.clearRect(0, 0, w, h);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+function spawnChord(x, y, color) {
+    if (chordContainer.childElementCount > 6) return;
     
-    particles.forEach((p, index) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
-        
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Connect to mouse
-        const dxMouse = mouseX - p.x;
-        const dyMouse = mouseY - p.y;
-        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-        
-        if (distMouse < 150) {
-            ctx.beginPath();
-            ctx.strokeStyle = `rgba(0, 255, 255, ${1 - distMouse / 150})`;
-            ctx.lineWidth = 1;
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouseX, mouseY);
-            ctx.stroke();
-            
-            // Mouse magnetism
-            p.x += dxMouse * 0.01;
-            p.y += dyMouse * 0.01;
-        }
-        
-        // Connect to other particles
-        for (let j = index + 1; j < particles.length; j++) {
-            const p2 = particles[j];
-            const dx = p.x - p2.x;
-            const dy = p.y - p2.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dist < 100) {
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(189, 0, 255, ${0.3 - dist / 333})`;
-                ctx.lineWidth = 0.5;
-                ctx.moveTo(p.x, p.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.stroke();
-            }
-        }
-    });
-    requestAnimationFrame(drawNetwork);
+    const el = document.createElement('div');
+    el.className = 'floating-chord';
+    el.textContent = chordNames[Math.floor(Math.random() * chordNames.length)];
+    el.style.left = `${x}px`;
+    el.style.top = `${y}px`;
+    el.style.textShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
+    
+    chordContainer.appendChild(el);
+    setTimeout(() => el.remove(), 1500);
 }
-drawNetwork();
+
+function drawStrings() {
+    ctx.clearRect(0, 0, w, h);
+    
+    // Calculate mouse speed
+    let dx = mouseX - lastMouseX;
+    let dy = mouseY - lastMouseY;
+    mouseSpeed = Math.sqrt(dx * dx + dy * dy);
+    lastMouseX = mouseX;
+    lastMouseY = mouseY;
+    
+    strings.forEach(string => {
+        string.update();
+        string.draw(ctx);
+    });
+    
+    requestAnimationFrame(drawStrings);
+}
+drawStrings();
 
 // ====== 3D Hover Tilt Effect ======
 const tiltCards = document.querySelectorAll('.hover-tilt');
