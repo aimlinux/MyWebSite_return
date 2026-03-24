@@ -16,8 +16,8 @@ window.addEventListener('mousemove', (e) => {
 function animateCursor() {
     let distX = mouseX - outlineX;
     let distY = mouseY - outlineY;
-    outlineX += distX * 0.15;
-    outlineY += distY * 0.15;
+    outlineX += distX * 0.1; // Smoother tracking
+    outlineY += distY * 0.1;
 
     cursorOutline.style.left = `${outlineX}px`;
     cursorOutline.style.top = `${outlineY}px`;
@@ -29,13 +29,15 @@ hoverTargets.forEach(target => {
     target.addEventListener('mouseenter', () => {
         cursorOutline.style.width = '60px';
         cursorOutline.style.height = '60px';
-        cursorOutline.style.backgroundColor = 'rgba(212, 175, 55, 0.1)';
+        cursorOutline.style.backgroundColor = 'rgba(212, 175, 55, 0.15)';
+        cursorOutline.style.borderColor = 'rgba(212, 175, 55, 0.8)';
         cursorDot.style.transform = 'translate(-50%, -50%) scale(0.5)';
     });
     target.addEventListener('mouseleave', () => {
-        cursorOutline.style.width = '30px';
-        cursorOutline.style.height = '30px';
+        cursorOutline.style.width = '40px';
+        cursorOutline.style.height = '40px';
         cursorOutline.style.backgroundColor = 'transparent';
+        cursorOutline.style.borderColor = 'rgba(212, 175, 55, 0.5)';
         cursorDot.style.transform = 'translate(-50%, -50%) scale(1)';
     });
 });
@@ -190,9 +192,39 @@ function spawnChord(x, y, color) {
     setTimeout(() => el.remove(), 1500);
 }
 
+const particles = [];
+const numParticles = 50;
+for(let i=0; i<numParticles; i++) {
+    particles.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        radius: Math.random() * 1.5 + 0.5,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 1) * 0.5 - 0.1,
+        alpha: Math.random() * 0.4 + 0.1
+    });
+}
+
 function drawStrings() {
     ctx.clearRect(0, 0, w, h);
     
+    // Ambient dust particles
+    particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vx += (Math.random() - 0.5) * 0.02; // Sway
+        if (p.y < -10) p.y = h + 10;
+        if (p.x < -10) p.x = w + 10;
+        if (p.x > w + 10) p.x = -10;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 175, 55, ${p.alpha})`;
+        ctx.shadowBlur = 5;
+        ctx.shadowColor = 'rgba(212, 175, 55, 0.4)';
+        ctx.fill();
+        ctx.shadowBlur = 0;
+    });
+
     // Calculate mouse speed
     let dx = mouseX - lastMouseX;
     let dy = mouseY - lastMouseY;

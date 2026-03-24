@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>お問い合わせ | ACOUSTIC.STRINGS</title>
+    <!-- Google Fonts for modern acoustic look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/main.css">
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Background Canvas & Chord Container -->
+    <div id="chord-container"></div>
+    <canvas id="strings-canvas"></canvas>
+
+    <!-- Main Content Wrapper -->
+    <div class="glass-wrapper">
+        <header>
+            <div class="logo">ACOUSTIC<span>.STRINGS</span></div>
+            <nav>
+                <a href="index.html#about" class="hover-target">私について</a>
+                <a href="index.html#works" class="hover-target">作品</a>
+                <a href="contact.html" class="hover-target">お問い合わせ</a>
+            </nav>
+        </header>
+
+        <section id="contact-page" class="reveal" style="padding-top: 50px; min-height: 80vh; align-items: center;">
+            <div class="glass-card hover-tilt" style="width: 100%; max-width: 600px; padding: 50px; margin: 0 auto;">
+                <h2 style="text-align: center; margin-bottom: 30px;">メッセージを<span class="neon-text">送る</span></h2>
+                <form class="contact-form" onsubmit="event.preventDefault(); alert('メッセージが送信されました！');">
+                    <div class="input-group">
+                        <input type="text" class="sleek-input hover-target" placeholder="お名前" required>
+                        <span class="focus-border"></span>
+                    </div>
+                    <div class="input-group">
+                        <input type="email" class="sleek-input hover-target" placeholder="メールアドレス" required>
+                        <span class="focus-border"></span>
+                    </div>
+                    <div class="input-group">
+                        <textarea class="sleek-input hover-target" rows="4" placeholder="どんなセッションがしたいですか？" required></textarea>
+                        <span class="focus-border"></span>
+                    </div>
+                    <button type="submit" class="btn primary hover-target" style="width: 100%; border: none; cursor: none;">送信する</button>
+                </form>
+            </div>
+            <div class="orb glowing-orb-2" style="bottom: 10%; right: 10%; left: auto;"></div>
+        </section>
+
+        <footer class="text-center" style="padding: 40px 0;">
+            <p class="copyright">© 2026 ACOUSTIC.STRINGS // モダン・アンプラグド</p>
+        </footer>
+    </div>
+
+    <script src="script/app.js"></script>
+</body>
+</html>
